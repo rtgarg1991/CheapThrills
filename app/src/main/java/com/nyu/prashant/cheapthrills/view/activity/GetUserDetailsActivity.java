@@ -1,4 +1,4 @@
-package com.nyu.prashant.cheapthrills;
+package com.nyu.prashant.cheapthrills.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
+import com.nyu.prashant.cheapthrills.R;
 
 public class GetUserDetailsActivity extends AppCompatActivity {
 

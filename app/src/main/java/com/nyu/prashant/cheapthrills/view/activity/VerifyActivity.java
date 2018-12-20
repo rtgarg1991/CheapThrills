@@ -1,4 +1,4 @@
-package com.nyu.prashant.cheapthrills;
+package com.nyu.prashant.cheapthrills.view.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
+import com.nyu.prashant.cheapthrills.R;
 
 public class VerifyActivity extends AppCompatActivity {
 

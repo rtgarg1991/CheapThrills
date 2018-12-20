@@ -1,4 +1,4 @@
-package com.nyu.prashant.cheapthrills;
+package com.nyu.prashant.cheapthrills.view.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +14,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
+import com.nyu.prashant.cheapthrills.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
