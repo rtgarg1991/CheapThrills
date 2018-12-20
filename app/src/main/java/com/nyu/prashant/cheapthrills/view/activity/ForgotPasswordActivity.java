@@ -1,4 +1,4 @@
-package com.nyu.prashant.cheapthrills;
+package com.nyu.prashant.cheapthrills.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ForgotPasswordContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.ForgotPasswordHandler;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
+import com.nyu.prashant.cheapthrills.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

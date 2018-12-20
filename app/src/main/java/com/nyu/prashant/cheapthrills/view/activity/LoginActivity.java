@@ -1,4 +1,4 @@
-package com.nyu.prashant.cheapthrills;
+package com.nyu.prashant.cheapthrills.view.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +18,8 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.Auth
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
+import com.nyu.prashant.cheapthrills.R;
 
 public class LoginActivity extends AppCompatActivity {
 
