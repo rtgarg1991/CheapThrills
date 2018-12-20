@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationDetails;
@@ -114,14 +113,16 @@ public class LoginActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CognitoSettings cognitoSettings = new CognitoSettings(LoginActivity.this);
-
-                CognitoUser thisUser = cognitoSettings
-                        .getUserPool()
-                        .getUser(String.valueOf(editTextUsername.getText()));
-                // Sign in the user
-                Log.i(TAG, "in button clicked....");
-                thisUser.getSessionInBackground(authenticationHandler);
+                Intent in = new Intent(LoginActivity.this, DiscountListActivity.class);
+                startActivity(in);
+                ////                CognitoSettings cognitoSettings = new CognitoSettings(LoginActivity.this);
+////
+//                CognitoUser thisUser = cognitoSettings
+//                        .getUserPool()
+//                        .getUser(String.valueOf(editTextUsername.getText()));
+//                // Sign in the user
+//                Log.i(TAG, "in button clicked....");
+//                thisUser.getSessionInBackground(authenticationHandler);
             }
         });
     }
