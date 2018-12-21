@@ -8,47 +8,43 @@ import com.amazonaws.regions.Regions;
 
 public class CognitoSettings {
 
-    private static final String userPoolId = "";
-    private static final String clientId = "";
-    private static final String clientSecret = "";
-    private static final Regions cognitoRegion =  Regions.US_EAST_1;
-
-    private String identityPoolId = "";
-
+    private static final String USER_POOL_ID = "";
+    private static final String CLIENT_ID = "";
+    private static final String CLIENT_SECRET = "";
+    private static final String IDENTITY_POOL_ID = "";
+    private static final Regions COGNITO_REGION =  Regions.US_EAST_1;
     private Context context;
-
 
     public CognitoSettings(Context context) {
         this.context = context;
     }
 
     public String getUserPoolId() {
-        return userPoolId;
+        return USER_POOL_ID;
     }
 
     public String getClientId() {
-        return clientId;
+        return CLIENT_ID;
     }
 
     public String getClientSecret() {
-        return clientSecret;
+        return CLIENT_SECRET;
     }
 
     public Regions getCognitoRegion() {
-        return cognitoRegion;
+        return COGNITO_REGION;
     }
 
     /*the entry point for all interactions with your user pool from your application*/
     public CognitoUserPool getUserPool() {
-        return new CognitoUserPool(context, userPoolId, clientId
-                , clientSecret, cognitoRegion);
+        return new CognitoUserPool(context, USER_POOL_ID, CLIENT_ID, CLIENT_SECRET, COGNITO_REGION);
     }
 
     public CognitoCachingCredentialsProvider getCredentialsProvider() {
         return new CognitoCachingCredentialsProvider(
                 context.getApplicationContext(),
-                identityPoolId, // Identity pool ID
-                cognitoRegion// Region;
+                IDENTITY_POOL_ID, // Identity pool ID
+                COGNITO_REGION// Region;
         );
     }
 

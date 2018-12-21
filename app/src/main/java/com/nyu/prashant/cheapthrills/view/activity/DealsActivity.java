@@ -36,6 +36,7 @@ import retrofit2.Response;
  */
 
 public class DealsActivity extends AppCompatActivity implements LocationListener {
+
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private LocationManager locationManager;
     private String provider;
@@ -242,7 +243,11 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
         progressBar.setVisibility(View.VISIBLE);
 
 
-        Call<DealList> getDealsCall = MainApplication.getInstance().getService().getDeals(MainApplication.API_KEY, String.format("%f,%f", lat, lng));
+        Call<DealList> getDealsCall = MainApplication.getInstance()
+                                                     .getService()
+                                                     .getDeals(
+                                                             MainApplication.API_KEY,
+                                                             String.format("%f,%f", lat, lng));
         getDealsCall.enqueue(new Callback<DealList>() {
             @Override
             public void onResponse(Call<DealList> call, Response<DealList> response) {
@@ -250,15 +255,14 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                     if (response.body() != null) {
                         DealList dealList = response.body();
 
-                        if (recyclerView.getAdapter() == null || !(recyclerView.getAdapter() instanceof DealsAdapter)) {
+                        if ((recyclerView.getAdapter() == null) ||
+                                !(recyclerView.getAdapter() instanceof DealsAdapter)) {
 
                             DealsAdapter adapter = new DealsAdapter();
                             recyclerView.setAdapter(adapter);
                         }
 
                         ((DealsAdapter) recyclerView.getAdapter()).setData(dealList);
-
-
                         recyclerView.setVisibility(View.VISIBLE);
                         error.setVisibility(View.GONE);
                         permission.setVisibility(View.GONE);
@@ -272,8 +276,6 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
             public void onFailure(Call<DealList> call, Throwable t) {
 
                 error.setText("Some error occrred! Try Again");
-
-
                 recyclerView.setVisibility(View.GONE);
                 error.setVisibility(View.VISIBLE);
                 permission.setVisibility(View.VISIBLE);
@@ -281,22 +283,14 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                 progressBar.setVisibility(View.GONE);
             }
         });
-
-
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+    public void onProviderDisabled(String provider) {}
 }

@@ -37,17 +37,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
 
+                Intent dealsIntent = new Intent(LoginActivity.this, DealsActivity.class);
+                LoginActivity.this.startActivity(dealsIntent);
                 log();
             }
 
             private void log() {
                 Log.i(TAG, "Login successfull, can get tokens here!");
-
-                /*userSession contains the tokens*/
-
-               /* Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String json = gson.toJson(userSession);
-                Log.i(TAG, "user session: "+json);*/
             }
 
             @Override
@@ -65,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 // Allow the sign-in to continue
                 authenticationContinuation.continueTask();
-
             }
 
             @Override
