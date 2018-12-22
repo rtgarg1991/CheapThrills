@@ -3,12 +3,14 @@ package com.nyu.prashant.cheapthrills.view.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +42,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private LocationManager locationManager;
     private String provider;
+    private String TAG = "Deals_Activity";
 
     RecyclerView recyclerView;
     ProgressBar progressBar;
@@ -96,13 +99,24 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
         provider = locationManager.getBestProvider(new Criteria(), false);
 
         checkLocationPermission();
+        initSignOut();
+    }
+
+    private void initSignOut() {
+
+        final FloatingActionButton signOutButton = findViewById(R.id.logOutButton);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signUpIntent = new Intent(DealsActivity.this, RegisterActivity.class);
+                DealsActivity.this.startActivity(signUpIntent);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // if
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -247,7 +261,8 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                                                      .getService()
                                                      .getDeals(
                                                              MainApplication.API_KEY,
-                                                             String.format("%f,%f", lat, lng));
+                                                             String.format("%f,%f", lat, lng),
+                                                             1);
         getDealsCall.enqueue(new Callback<DealList>() {
             @Override
             public void onResponse(Call<DealList> call, Response<DealList> response) {
@@ -275,7 +290,8 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
             @Override
             public void onFailure(Call<DealList> call, Throwable t) {
 
-                error.setText("Some error occrred! Try Again");
+                Log.d(TAG, t.getLocalizedMessage());
+                error.setText("Some error occurred! Try Again");
                 recyclerView.setVisibility(View.GONE);
                 error.setVisibility(View.VISIBLE);
                 permission.setVisibility(View.VISIBLE);

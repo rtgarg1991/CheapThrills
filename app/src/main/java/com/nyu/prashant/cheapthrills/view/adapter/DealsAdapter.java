@@ -4,12 +4,20 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.nyu.prashant.cheapthrills.R;
 import com.nyu.prashant.cheapthrills.model.Deal;
 import com.nyu.prashant.cheapthrills.model.DealList;
@@ -17,11 +25,17 @@ import com.nyu.prashant.cheapthrills.model.MainDeal;
 import com.nyu.prashant.cheapthrills.view.activity.DealActivity;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> {
+
     List<MainDeal> deals;
+    private static final String TAG = "Deals_Adapter";
 
     public void setData(DealList dealList) {
         if (this.deals == null) {
@@ -84,7 +98,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> 
         }
 
         viewHolder.setDealId(mainDeal.getId());
-
+        viewHolder.setMainDeal(mainDeal);
     }
 
     @Override
@@ -103,6 +117,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> 
         private ImageView imageView;
         private View layout;
         private Long dealId;
+        private MainDeal mainDeal;
 
         ViewHolder(View v) {
             super(v);
@@ -120,13 +135,70 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> 
                         Intent intent = new Intent(layout.getContext(), DealActivity.class);
                         intent.putExtra("deal_id", dealId);
                         layout.getContext().startActivity(intent);
+                        sendToDynamoDB(dealId);
                     }
+                }
+
+                private void sendToDynamoDB(final Long dealId) {
+
+                    String url = "https://u0i1l6urvh.execute-api.us-east-1.amazonaws.com/Deal";
+                    StringRequest postRequest = new StringRequest(
+                            Request.Method.POST, url,
+
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    // response
+
+                                    Log.d("Response", response);
+                                }
+                            },
+
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // error
+                                    Log.d("Error.Response", error.getLocalizedMessage());
+                                }
+                            }
+                    ) {
+
+                        @Override
+                        public byte[] getBody() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("id", dealId.toString());
+
+                            Gson gson = new Gson();
+                            String dealJson = gson.toJson(mainDeal);
+                            params.put("mainDeal", dealJson);
+                            return new JSONObject(params).toString().getBytes();
+                        }
+
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json";
+                        }
+
+//                        @Override
+//                        protected Map<String, String> getParams() {
+//                            Map<String, String> params = new HashMap<>();
+//                            params.put("id", dealId.toString());
+//                            return params;
+//                        }
+                    };
+                    Volley.newRequestQueue(layout.getContext()).add(postRequest);
+//                    queue.add(postRequest);
+//                    queue.start();
                 }
             });
         }
 
         void setDealId(Long dealId) {
             this.dealId = dealId;
+        }
+
+        public void setMainDeal(MainDeal mainDeal) {
+            this.mainDeal = mainDeal;
         }
     }
 }

@@ -14,7 +14,9 @@ import retrofit2.http.Query;
 
 public interface OfferService {
     @GET("v2/deals")
-    Call<DealList> getDeals(@Query(value = "api_key") String apiKey, @Query(value = "location") String location);
+    Call<DealList> getDeals(@Query(value = "api_key") String apiKey,
+                            @Query(value = "location") String location,
+                            @Query(value = "radius") int radius);
 
     @GET("v2/deals/{dealId}")
     Call<Deal> getDeal(@Path(value = "dealId") Long dealId, @Query(value = "api_key") String apiKey);

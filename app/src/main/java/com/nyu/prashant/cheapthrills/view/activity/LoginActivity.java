@@ -23,7 +23,7 @@ import com.nyu.prashant.cheapthrills.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "Login";
+    private static final String TAG = "Login_Activity ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String localizedMessage = exception.getLocalizedMessage();
                 final StringBuilder msg = new StringBuilder("Login failed");
-                Log.i(TAG, msg.toString());
+                Log.i(TAG, msg.append(localizedMessage).toString());
                 if (localizedMessage.contains("User does not exist")) {
                     msg.append(": User does not exist");
                 } else if (localizedMessage.contains("Incorrect username or password")) {
@@ -131,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent signUpIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                // signUpIntent.putExtra("key", value);
                 LoginActivity.this.startActivity(signUpIntent);
             }
         });

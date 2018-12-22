@@ -1,5 +1,6 @@
 package com.nyu.prashant.cheapthrills.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,7 @@ import com.nyu.prashant.cheapthrills.R;
 
 public class LogoutActivity extends AppCompatActivity {
 
-    private static final String TAG = "Cognito";
+    private static final String TAG = "Logout_Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class LogoutActivity extends AppCompatActivity {
             @Override
             public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
                 Log.i(TAG, "do we have vaild access & id tokens? " + userSession.isValid());
+                Intent signUpIntent = new Intent(LogoutActivity.this, LoginActivity.class);
+                LogoutActivity.this.startActivity(signUpIntent);
             }
 
             @Override
@@ -61,24 +64,21 @@ public class LogoutActivity extends AppCompatActivity {
             }
         };
         currentUser.getSessionInBackground(callbackAuthentication);
-
-//        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         /*global signout*/
         GenericHandler callbackGlobalSignOut = new GenericHandler() {
             @Override
             public void onSuccess() {
-//                successfully signed out
+                // successfully signed out
                 Log.i(TAG, "global sign out success");
+                Intent signUpIntent = new Intent(LogoutActivity.this, LoginActivity.class);
+                LogoutActivity.this.startActivity(signUpIntent);
             }
 
             @Override
             public void onFailure(Exception exception) {
-//failed sign out
+                //failed sign out
                 Log.i(TAG, "global sign out failure: " + exception.getLocalizedMessage());
             }
         };
-
-//        currentUser.globalSignOutInBackground(callbackGlobalSignOut);
     }
 }

@@ -93,5 +93,17 @@ public class RegisterActivity extends AppCompatActivity {
                         , null, signupCallback);
             }
         });
+
+        Button signInRedirect = findViewById(R.id.button);
+        signInRedirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent signInIntent = new Intent(
+                        RegisterActivity.this,
+                        LoginActivity.class);
+                RegisterActivity.this.startActivity(signInIntent);
+            }
+        });
     }
 }

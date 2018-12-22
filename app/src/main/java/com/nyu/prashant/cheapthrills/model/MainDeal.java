@@ -25,7 +25,7 @@ public class MainDeal {
     private String url;
     @SerializedName("price")
     @Expose
-    private Integer price;
+    private Double price;
     @SerializedName("value")
     @Expose
     private Double value;
@@ -117,11 +117,11 @@ public class MainDeal {
         this.url = url;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
