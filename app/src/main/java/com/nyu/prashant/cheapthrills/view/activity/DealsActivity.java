@@ -43,6 +43,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
     private LocationManager locationManager;
     private String provider;
     private String TAG = "Deals_Activity";
+    private String params;
 
     RecyclerView recyclerView;
     ProgressBar progressBar;
@@ -54,34 +55,24 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deals);
+        initUI();
 
-        recyclerView = findViewById(R.id.recycler_view);
-        progressBar = findViewById(R.id.progress_bar);
-        loading = findViewById(R.id.loading);
-        error = findViewById(R.id.error);
-        permission = findViewById(R.id.permission);
-
-        recyclerView.setVisibility(View.GONE);
-        error.setVisibility(View.GONE);
-        permission.setVisibility(View.GONE);
-        loading.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        Bundle bundle = getIntent().getExtras();
+        params = bundle.getString("params");
+        Log.i("Filters", params);
 
         permission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(DealsActivity.this,
+                if (ContextCompat.checkSelfPermission(
+                        DealsActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
                     checkLocationPermission();
                 } else {
-
                     // for now get last known location and update offers list
-
                     Location location = locationManager.getLastKnownLocation(provider);
-
                     onLocationChanged(location);
-
                 }
             }
         });
@@ -100,6 +91,20 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
 
         checkLocationPermission();
         initSignOut();
+    }
+
+    private void initUI() {
+        recyclerView = findViewById(R.id.recycler_view);
+        progressBar = findViewById(R.id.progress_bar);
+        loading = findViewById(R.id.loading);
+        error = findViewById(R.id.error);
+        permission = findViewById(R.id.permission);
+
+        recyclerView.setVisibility(View.GONE);
+        error.setVisibility(View.GONE);
+        permission.setVisibility(View.GONE);
+        loading.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void initSignOut() {
@@ -204,12 +209,11 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if ((grantResults.length > 0) &&
+                        (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                        ) {
 
-                    // permission was granted,
-                    // we can start requesting location updates now
-
+                    // permission was granted,  we can start requesting location updates now
                     // just make sure first
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION)
@@ -223,9 +227,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                         locationManager.requestLocationUpdates(provider, 400, 1, this);
                         return;
                     }
-
                 }
-
 
                 recyclerView.setVisibility(View.GONE);
                 error.setVisibility(View.VISIBLE);
@@ -256,34 +258,27 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
         loading.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-
-        Call<DealList> getDealsCall = MainApplication.getInstance()
-                                                     .getService()
-                                                     .getDeals(
-                                                             MainApplication.API_KEY,
-                                                             String.format("%f,%f", lat, lng),
-                                                             1);
+        Call<DealList> getDealsCall = getDeals(lat, lng);
         getDealsCall.enqueue(new Callback<DealList>() {
             @Override
             public void onResponse(Call<DealList> call, Response<DealList> response) {
-                if (response != null) {
-                    if (response.body() != null) {
-                        DealList dealList = response.body();
 
-                        if ((recyclerView.getAdapter() == null) ||
-                                !(recyclerView.getAdapter() instanceof DealsAdapter)) {
+                if ((response != null) && (response.body() != null)) {
 
-                            DealsAdapter adapter = new DealsAdapter();
-                            recyclerView.setAdapter(adapter);
-                        }
+                    DealList dealList = response.body();
+                    if ((recyclerView.getAdapter() == null) ||
+                            !(recyclerView.getAdapter() instanceof DealsAdapter)) {
 
-                        ((DealsAdapter) recyclerView.getAdapter()).setData(dealList);
-                        recyclerView.setVisibility(View.VISIBLE);
-                        error.setVisibility(View.GONE);
-                        permission.setVisibility(View.GONE);
-                        loading.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.GONE);
+                        DealsAdapter adapter = new DealsAdapter();
+                        recyclerView.setAdapter(adapter);
                     }
+
+                    ((DealsAdapter) recyclerView.getAdapter()).setData(dealList);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    error.setVisibility(View.GONE);
+                    permission.setVisibility(View.GONE);
+                    loading.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -299,6 +294,17 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    private Call<DealList> getDeals(Double lat, Double lng) {
+        final Call<DealList> deals = MainApplication.getInstance()
+                                                    .getService()
+                                                    .getDeals(
+                                                            MainApplication.API_KEY,
+                                                            String.format("%f,%f", lat, lng),
+                                                            1,
+                                                            params);
+        return deals;
     }
 
     @Override

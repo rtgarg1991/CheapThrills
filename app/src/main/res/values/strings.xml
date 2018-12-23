@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Cheap Thrills</string>
+    <string name="fashion_accessories">Fashion Accessories</string>
+    <string name="kids">Kids</string>
+    <string name="home_goods">Home Goods</string>
+    <string name="food_alcohol">Food and Alcohol</string>
+    <string name="massage">Massage</string>
+    <string name="bars_clubs">Bars and Clubs</string>
+    <string name="life_skills_classes">Life Skills Classes</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="baby">Baby</string>
+    <string name="unknown">Others</string>
+    <string name="electronics">Electronics</string>
+    <string name="clothing">Clothing</string>
+    <string name="automotive_services">Automotive Services</string>
+    <string name="hair_removal">Hair Removal</string>
+    <string name="applyFilter">Apply Filter</string>
 </resources>

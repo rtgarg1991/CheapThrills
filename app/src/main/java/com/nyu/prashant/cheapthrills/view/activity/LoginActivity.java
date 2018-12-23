@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Filter;
 
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
@@ -37,8 +38,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
 
-                Intent dealsIntent = new Intent(LoginActivity.this, DealsActivity.class);
-                LoginActivity.this.startActivity(dealsIntent);
+                Intent filterIntent = new Intent(LoginActivity.this, FilterActivity.class);
+                LoginActivity.this.startActivity(filterIntent);
                 log();
             }
 

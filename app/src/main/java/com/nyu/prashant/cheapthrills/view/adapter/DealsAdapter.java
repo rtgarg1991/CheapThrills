@@ -76,8 +76,6 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> 
         } else {
             viewHolder.discount.setText("N/A");
         }
-
-
         if (mainDeal.getTitle() != null) {
             viewHolder.title.setText(mainDeal.getTitle());
         } else {
@@ -88,15 +86,12 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> 
         } else {
             viewHolder.description.setText("N/A");
         }
-
-
         if (!TextUtils.isEmpty(mainDeal.getImageUrl())) {
             viewHolder.imageView.setVisibility(View.VISIBLE);
             Picasso.get().load(mainDeal.getImageUrl()).into(viewHolder.imageView);
         } else {
             viewHolder.imageView.setVisibility(View.GONE);
         }
-
         viewHolder.setDealId(mainDeal.getId());
         viewHolder.setMainDeal(mainDeal);
     }
@@ -164,7 +159,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.ViewHolder> 
                     ) {
 
                         @Override
-                        public byte[] getBody() throws AuthFailureError {
+                        public byte[] getBody() {
                             Map<String, String> params = new HashMap<>();
                             params.put("id", dealId.toString());
 
