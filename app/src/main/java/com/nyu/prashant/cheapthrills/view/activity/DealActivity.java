@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUser;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
 import com.nyu.prashant.cheapthrills.MainApplication;
 import com.nyu.prashant.cheapthrills.R;
 import com.nyu.prashant.cheapthrills.model.Deal;
@@ -58,6 +61,10 @@ public class DealActivity extends AppCompatActivity {
 
         final Button map = findViewById(R.id.map);
         final Button link = findViewById(R.id.link);
+
+
+        CognitoUserPool cognitoUserPool = new CognitoSettings(this).getUserPool();
+        final CognitoUser cognitoUser = cognitoUserPool.getCurrentUser();
 
 
         Call<Deal> mainDealCall = MainApplication.getInstance().getService().getDeal(dealId);
@@ -171,17 +178,17 @@ public class DealActivity extends AppCompatActivity {
                         map.setVisibility(View.GONE);
                     }
 
-                    if(!TextUtils.isEmpty(mainDeal.getCategorySlug())) {
+                    if (!TextUtils.isEmpty(mainDeal.getCategorySlug()) && cognitoUser != null && !TextUtils.isEmpty(cognitoUser.getUserId())) {
                         SelectedDeal selectedDeal = new SelectedDeal();
-                        selectedDeal.setUserId("test");
+                        selectedDeal.setUserId(cognitoUser.getUserId());
                         selectedDeal.setCategorySlug(mainDeal.getCategorySlug());
 
-                        Call<ResponseBody> mainDealCall =  MainApplication.getInstance().getService().postDeal(selectedDeal);
+                        Call<ResponseBody> mainDealCall = MainApplication.getInstance().getService().postDeal(selectedDeal);
 
                         mainDealCall.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if(response != null) {
+                                if (response != null) {
 
                                 }
                             }

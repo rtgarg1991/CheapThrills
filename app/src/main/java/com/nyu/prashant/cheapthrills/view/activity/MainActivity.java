@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.nyu.prashant.cheapthrills.R;
 import com.nyu.prashant.cheapthrills.view.fragment.DealsFragment;
+import com.nyu.prashant.cheapthrills.view.fragment.RecommendedDealsFragment;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new DealsFragment(), "All Deals");
-        adapter.addFragment(new DealsFragment(), "Recommended Deals");
+        adapter.addFragment(new RecommendedDealsFragment(), "Recommended Deals");
         viewPager.setAdapter(adapter);
     }
 

@@ -20,6 +20,9 @@ public interface OfferService {
     @GET("deal/search")
     Call<DealList> getDeals(@Query(value = "latitude") Double latitude, @Query(value = "longitude") Double longitude);
 
+    @GET("deal/recommended")
+    Call<DealList> getRecommendedDeals(@Query(value = "latitude") Double latitude, @Query(value = "longitude") Double longitude, @Query(value = "userid") String userid);
+
     @GET("deal/{dealId}")
     Call<Deal> getDeal(@Path(value = "dealId") Long dealId);
 

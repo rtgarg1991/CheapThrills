@@ -77,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
 
-        Button buttonRegister = findViewById(R.id.button);
+        Button buttonRegister = findViewById(R.id.signUpButton);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +91,18 @@ public class RegisterActivity extends AppCompatActivity {
                 cognitoSettings.getUserPool().signUpInBackground(String.valueOf(inputUsername.getText())
                         , String.valueOf(inputPassword.getText()), userAttributes
                         , null, signupCallback);
+            }
+        });
+
+        Button signInRedirect = findViewById(R.id.signInButton);
+        signInRedirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent signInIntent = new Intent(
+                        RegisterActivity.this,
+                        LoginActivity.class);
+                RegisterActivity.this.startActivity(signInIntent);
             }
         });
     }

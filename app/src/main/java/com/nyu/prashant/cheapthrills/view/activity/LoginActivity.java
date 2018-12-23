@@ -23,7 +23,7 @@ import com.nyu.prashant.cheapthrills.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "Login";
+    private static final String TAG = "Login_Activity ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +37,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
 
+                Intent filterIntent = new Intent(LoginActivity.this, MainActivity.class);
+                LoginActivity.this.startActivity(filterIntent);
                 log();
             }
 
             private void log() {
                 Log.i(TAG, "Login successfull, can get tokens here!");
-
-                /*userSession contains the tokens*/
-
-               /* Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String json = gson.toJson(userSession);
-                Log.i(TAG, "user session: "+json);*/
             }
 
             @Override
@@ -65,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 // Allow the sign-in to continue
                 authenticationContinuation.continueTask();
-
             }
 
             @Override
@@ -73,10 +68,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.i(TAG, "in getMFACode()....");
 
-                 /** if Multi-factor authentication is required; get the verification code from
-                  * user multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
-                  * Allow the sign-in process to continue
-                  * multiFactorAuthenticationContinuation.continueTask();*/
+                /** if Multi-factor authentication is required; get the verification code from
+                 * user multiFactorAuthenticationContinuation.setMfaCode(mfaVerificationCode);
+                 * Allow the sign-in process to continue
+                 * multiFactorAuthenticationContinuation.continueTask();*/
             }
 
             @Override
@@ -89,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String localizedMessage = exception.getLocalizedMessage();
                 final StringBuilder msg = new StringBuilder("Login failed");
-                Log.i(TAG, msg.toString());
+                Log.i(TAG, msg.append(localizedMessage).toString());
                 if (localizedMessage.contains("User does not exist")) {
                     msg.append(": User does not exist");
                 } else if (localizedMessage.contains("Incorrect username or password")) {
@@ -136,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent signUpIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                // signUpIntent.putExtra("key", value);
                 LoginActivity.this.startActivity(signUpIntent);
             }
         });

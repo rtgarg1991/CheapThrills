@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
+import com.nyu.prashant.cheapthrills.CognitoSettings;
 import com.nyu.prashant.cheapthrills.MainApplication;
 import com.nyu.prashant.cheapthrills.R;
 import com.nyu.prashant.cheapthrills.model.DealList;
@@ -37,7 +39,7 @@ import retrofit2.Response;
  * Created by rohit on 20/12/18.
  */
 
-public class DealsFragment extends Fragment implements LocationListener {
+public class RecommendedDealsFragment extends Fragment implements LocationListener {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private LocationManager locationManager;
     private String provider;
@@ -255,8 +257,18 @@ public class DealsFragment extends Fragment implements LocationListener {
         loading.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
+        String userid = "test";
+        if (getContext() != null) {
+            CognitoUserPool cognitoUserPool = new CognitoSettings(getContext()).getUserPool();
+            if (cognitoUserPool != null) {
+                if (cognitoUserPool.getCurrentUser() != null && !TextUtils.isEmpty(cognitoUserPool.getCurrentUser().getUserId())) {
+                    userid = cognitoUserPool.getCurrentUser().getUserId();
+                }
+            }
+        }
 
-        Call<DealList> getDealsCall = MainApplication.getInstance().getService().getDeals(lat, lng);
+
+        Call<DealList> getDealsCall = MainApplication.getInstance().getService().getRecommendedDeals(lat, lng, userid);
         getDealsCall.enqueue(new Callback<DealList>() {
             @Override
             public void onResponse(Call<DealList> call, Response<DealList> response) {
