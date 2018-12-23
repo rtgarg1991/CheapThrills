@@ -15,8 +15,10 @@ import com.nyu.prashant.cheapthrills.MainApplication;
 import com.nyu.prashant.cheapthrills.R;
 import com.nyu.prashant.cheapthrills.model.Deal;
 import com.nyu.prashant.cheapthrills.model.MainDeal;
+import com.nyu.prashant.cheapthrills.model.SelectedDeal;
 import com.squareup.picasso.Picasso;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,7 +60,7 @@ public class DealActivity extends AppCompatActivity {
         final Button link = findViewById(R.id.link);
 
 
-        Call<Deal> mainDealCall = MainApplication.getInstance().getService().getDeal(dealId, MainApplication.API_KEY);
+        Call<Deal> mainDealCall = MainApplication.getInstance().getService().getDeal(dealId);
 
         mainDealCall.enqueue(new Callback<Deal>() {
             @Override
@@ -109,7 +111,7 @@ public class DealActivity extends AppCompatActivity {
                         provider.setText("N/A");
                     }
 
-                    if (mainDeal.getPrice() != null) {
+                    if (mainDeal.getPrice() != null && !Double.isNaN(mainDeal.getPrice())) {
                         offeredPrice.setText(String.valueOf(mainDeal.getPrice()));
                     } else {
                         offeredPrice.setText("N/A");
@@ -167,6 +169,28 @@ public class DealActivity extends AppCompatActivity {
                     } else {
                         merchant.setText("N/A");
                         map.setVisibility(View.GONE);
+                    }
+
+                    if(!TextUtils.isEmpty(mainDeal.getCategorySlug())) {
+                        SelectedDeal selectedDeal = new SelectedDeal();
+                        selectedDeal.setUserId("test");
+                        selectedDeal.setCategorySlug(mainDeal.getCategorySlug());
+
+                        Call<ResponseBody> mainDealCall =  MainApplication.getInstance().getService().postDeal(selectedDeal);
+
+                        mainDealCall.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if(response != null) {
+
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
                     }
 
                 }

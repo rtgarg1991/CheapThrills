@@ -2,9 +2,13 @@ package com.nyu.prashant.cheapthrills.network;
 
 import com.nyu.prashant.cheapthrills.model.Deal;
 import com.nyu.prashant.cheapthrills.model.DealList;
+import com.nyu.prashant.cheapthrills.model.SelectedDeal;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -13,9 +17,12 @@ import retrofit2.http.Query;
  */
 
 public interface OfferService {
-    @GET("v2/deals")
-    Call<DealList> getDeals(@Query(value = "api_key") String apiKey, @Query(value = "location") String location);
+    @GET("deal/search")
+    Call<DealList> getDeals(@Query(value = "latitude") Double latitude, @Query(value = "longitude") Double longitude);
 
-    @GET("v2/deals/{dealId}")
-    Call<Deal> getDeal(@Path(value = "dealId") Long dealId, @Query(value = "api_key") String apiKey);
+    @GET("deal/{dealId}")
+    Call<Deal> getDeal(@Path(value = "dealId") Long dealId);
+
+    @POST("dynamo")
+    Call<ResponseBody> postDeal(@Body SelectedDeal selectedDeal);
 }

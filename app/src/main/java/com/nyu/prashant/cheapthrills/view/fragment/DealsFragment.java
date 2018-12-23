@@ -1,4 +1,4 @@
-package com.nyu.prashant.cheapthrills.view.activity;
+package com.nyu.prashant.cheapthrills.view.fragment;
 
 import android.Manifest;
 import android.content.Context;
@@ -10,14 +10,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,7 +37,7 @@ import retrofit2.Response;
  * Created by rohit on 20/12/18.
  */
 
-public class DealsActivity extends AppCompatActivity implements LocationListener {
+public class DealsFragment extends Fragment implements LocationListener {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private LocationManager locationManager;
     private String provider;
@@ -47,15 +49,20 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
     Button permission;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deals);
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        // The last two arguments ensure LayoutParams are inflated
+        // properly.
+        View rootView = inflater.inflate(
+                R.layout.fragment_deals, container, false);
+        Bundle args = getArguments();
 
-        recyclerView = findViewById(R.id.recycler_view);
-        progressBar = findViewById(R.id.progress_bar);
-        loading = findViewById(R.id.loading);
-        error = findViewById(R.id.error);
-        permission = findViewById(R.id.permission);
+
+        recyclerView = rootView.findViewById(R.id.recycler_view);
+        progressBar = rootView.findViewById(R.id.progress_bar);
+        loading = rootView.findViewById(R.id.loading);
+        error = rootView.findViewById(R.id.error);
+        permission = rootView.findViewById(R.id.permission);
 
         recyclerView.setVisibility(View.GONE);
         error.setVisibility(View.GONE);
@@ -66,7 +73,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
         permission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(DealsActivity.this,
+                if (getActivity() != null && ContextCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
                     checkLocationPermission();
@@ -82,7 +89,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
             }
         });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
         DealsAdapter adapter = new DealsAdapter();
@@ -90,19 +97,22 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
 
 
         // get location manager and provider
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         provider = locationManager.getBestProvider(new Criteria(), false);
 
         checkLocationPermission();
+
+
+        return rootView;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         // if
-        if (ContextCompat.checkSelfPermission(this,
+        if (getContext() != null && ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
@@ -128,11 +138,11 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
 
         // check if we have permission, then we need to disable location updates
-        if (ContextCompat.checkSelfPermission(this,
+        if (getContext() != null && ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
@@ -142,27 +152,29 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
 
     private boolean checkLocationPermission() {
         // check if we have the permission or not
-        if (ContextCompat.checkSelfPermission(this,
+        if (getContext() != null && ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             error.setText("No Permission");
 
             // Should we show an explanation to user before asking for permission
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (getActivity() != null && ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // show explaination dialog to user and if user accepts, then ask for permission
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(getContext())
                         .setTitle("Location Permission")
                         .setMessage("Please provide location permission")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(DealsActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                                if (getActivity() != null) {
+                                    ActivityCompat.requestPermissions(getActivity(),
+                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            MY_PERMISSIONS_REQUEST_LOCATION);
+                                }
                             }
                         })
                         .create()
@@ -170,10 +182,12 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
 
 
             } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
+                if (getActivity() != null) {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_LOCATION);
+                }
             }
             return false;
         } else {
@@ -196,7 +210,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                     // we can start requesting location updates now
 
                     // just make sure first
-                    if (ContextCompat.checkSelfPermission(this,
+                    if (getContext() != null && ContextCompat.checkSelfPermission(getContext(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
@@ -242,7 +256,7 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
         progressBar.setVisibility(View.VISIBLE);
 
 
-        Call<DealList> getDealsCall = MainApplication.getInstance().getService().getDeals(MainApplication.API_KEY, String.format("%f,%f", lat, lng));
+        Call<DealList> getDealsCall = MainApplication.getInstance().getService().getDeals(lat, lng);
         getDealsCall.enqueue(new Callback<DealList>() {
             @Override
             public void onResponse(Call<DealList> call, Response<DealList> response) {
@@ -262,6 +276,17 @@ public class DealsActivity extends AppCompatActivity implements LocationListener
                         recyclerView.setVisibility(View.VISIBLE);
                         error.setVisibility(View.GONE);
                         permission.setVisibility(View.GONE);
+                        loading.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                    } else {
+
+
+                        error.setText("Not deals found. Try again");
+
+
+                        recyclerView.setVisibility(View.GONE);
+                        error.setVisibility(View.VISIBLE);
+                        permission.setVisibility(View.VISIBLE);
                         loading.setVisibility(View.GONE);
                         progressBar.setVisibility(View.GONE);
                     }
