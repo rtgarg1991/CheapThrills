@@ -8,10 +8,10 @@ import com.amazonaws.regions.Regions;
 
 public class CognitoSettings {
 
-    public static final String USER_POOL_ID = "us-east-1_gUVEEBG4f";
-    public static final String CLIENT_ID = "104u7nob7tocshj5ihhqt685rt";
-    public static final String CLIENT_SECRET = "82kvq994q6geqe5g05b29qjh1fiufl5g5ljiq6pm1g32v897md";
-    public static final String IDENTITY_POOL_ID = "eu-west-1:74e4c7ad-5f4d-4a94-a02d-703978da6ddd";
+    public static final String USER_POOL_ID = "";
+    public static final String CLIENT_ID = "";
+    public static final String CLIENT_SECRET = "";
+    public static final String IDENTITY_POOL_ID = "";
     public static final Regions COGNITO_REGION =  Regions.US_EAST_1;
     private Context context;
 
